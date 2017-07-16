@@ -80,6 +80,18 @@
 			overflow: hidden;
 			margin: 5px 0;
 		}
+		input::-webkit-input-placeholder { /* WebKit browsers */
+		  color: #fff;
+		}
+		input:-moz-placeholder { /* Mozilla Firefox 4 to 18 */
+		  color: #fff;
+		}
+		input::-moz-placeholder { /* Mozilla Firefox 19+ */
+		  color: #fff;
+		}
+		input:-ms-input-placeholder { /* Internet Explorer 10+ */
+		  color: #fff;
+		}
 	</style>
 </head>
 <body>
@@ -87,7 +99,7 @@
 		<h1>手机号码归属地查询</h1>
 	    <div class="outer">
 	        <p>请输入手机号码</p>
-	        <input type="text"  >
+	        <input type="text" placeholder="请输入您的手机号" >
 	        <div class="box">
 		        <span class="button">查询</span>
 		        <span class="error">号码有误/无数据</span>
