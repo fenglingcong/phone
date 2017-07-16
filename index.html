@@ -1,0 +1,164 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>号码归属地</title>
+	<style>
+		*{
+			margin: 0;
+			padding: 0;
+		}
+		ul,li{
+			list-style: none;
+		}
+		.container{
+			width: 400px;
+			height: 250px;
+			border: 1px solid #ccc;
+			border-radius: 6px;
+			padding: 0 16px;
+			box-sizing: border-box;
+			position: absolute;
+			top: -100px;
+			left: 0;
+			right: 0;
+			bottom: 0;
+			margin: auto;
+		}
+		.container h1{
+			font-size: 20px;
+			text-align: center;
+			line-height: 50px;
+		} 
+		p{
+			margin-bottom: 5px;
+			font-size: 12px;
+			background: #4285f4;
+			line-height: 24px;
+			padding-left: 10px;
+			color: #fff;
+		}
+		input{
+			background: #4285f4;
+			border: 0;
+			height: 24px;
+			outline: none;
+			border-radius: 2px;
+			padding-left: 10px;
+			color: #fff;
+		}
+		input,li{
+			margin: 5px 0;
+		}
+		ul{
+			background: #4285f4;
+			padding: 5px 10px;
+			border-radius: 3px;
+			color: #fff;
+			font-size: 16px;
+
+		}
+		.button{
+			width: 50px;
+			height: 20px;
+			font-size: 14px;
+			text-align: center;
+			line-height: 20px;
+			border-radius: 2px;
+			background-color: #eee; 
+			display: block;
+			cursor: pointer;
+			float: left;
+			margin-right: 8px;
+		}
+		.error{
+			color: red;
+			float: left;
+			display: none;
+		}
+		.box{
+			overflow: hidden;
+			margin: 5px 0;
+		}
+	</style>
+</head>
+<body>
+	<div class="container">
+		<h1>手机号码归属地查询</h1>
+	    <div class="outer">
+	        <p>请输入手机号码</p>
+	        <input type="text"  >
+	        <div class="box">
+		        <span class="button">查询</span>
+		        <span class="error">号码有误/无数据</span>
+		    </div>
+	        <ul>
+	            <li class="num">手机号码: <span></span></li>            
+	            <li class="province">归属省份: <span></span></li>
+	            <li class="operators">运 营 商: <span></span></li>
+	        </ul>
+	    </div>
+	</div>
+
+	<script src="https://cdn.bootcss.com/jquery/3.2.1/jquery.min.js"></script>
+	<script>
+	    var tel;
+	    var ajax=function(){
+	        //淘宝接口    
+	        $.ajax({
+	             type: "get",
+	             url: 'http://tcc.taobao.com/cc/json/mobile_tel_segment.htm?tel='+tel,
+	             dataType: "jsonp",
+	             jsonp: "callback",
+	             success: function(data){
+	                console.log(data);
+	                $('.error').css('display','none');
+	                var province = data.province,
+	                    operators = data.catName,
+	                    num = data.telString;
+
+	                $('.num span').html(num);
+	                $('.province span').html(province);
+	                $('.operators span').html(operators);
+	             },
+	             error:function (){    
+	                $('li span').html('');
+	                $('.error').css('display','block');        
+	             }
+	         });
+	    }
+	   
+
+	    var reg = /^(13|15|18)[0-9]{9}$/;//点击查询
+	    $('.button').click(function(){
+	        tel=$('input[type=text]').val();
+	        if(tel){
+	            if(reg.test(tel)){
+	                ajax();
+	            }else{
+	                $('li span').html('');
+	                $('.error').css('display','block');    
+	            }
+	        }else{
+	        	alert('请输入手机号码');
+	        }
+	    });
+
+	    //键盘事件
+	    $(window).keydown(function(event){
+	        tel=$('input[type=text]').val();
+	        if(event.keyCode==13) {
+	            if(tel){
+	                if(reg.test(tel)){
+	                    ajax();
+	                }else{
+	                    $('li span').html('');
+	                    $('.error').css('display','block');    
+	                }
+	            }
+	        }
+	    });
+
+	</script>
+</body>
+</html>
